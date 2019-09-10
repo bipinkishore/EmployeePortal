@@ -1,0 +1,10 @@
+---
+path: .
+instances: 1
+buildpack: https://github.com/cloudfoundry/java-buildpack
+services:
+- empportal
+applications:
+- name: empportal
+  env:
+    SPRING_PROFILES_ACTIVE: dev, cloudfoundry

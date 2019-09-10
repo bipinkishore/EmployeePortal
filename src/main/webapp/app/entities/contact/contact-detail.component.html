@@ -1,0 +1,45 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <div *ngIf="contact">
+            <h2><span>Contact</span> {{contact.id}}</h2>
+            <hr>
+            <jhi-alert-error></jhi-alert-error>
+            <dl class="row-md jh-entity-details">
+                <dt><span>Name</span></dt>
+                <dd>
+                    <span>{{contact.name}}</span>
+                </dd>
+                <dt><span>Email Id</span></dt>
+                <dd>
+                    <span>{{contact.email}}</span>
+                </dd>
+                <dt><span>Status</span></dt>
+                <dd>
+                    <span>{{contact.status}}</span>
+                </dd>
+                <dt><span>Mobile Number</span></dt>
+                <dd>
+                    <span>{{contact.mobileNumber}}</span>
+                </dd>
+                <dt><span>Group</span></dt>
+                <dd>
+                    <div *ngIf="contact.group">
+                        <a [routerLink]="['/group', contact.group?.id, 'view']">{{contact.group?.id}}</a>
+                    </div>
+                </dd>
+            </dl>
+
+            <button type="submit"
+                    (click)="previousState()"
+                    class="btn btn-info">
+                <fa-icon [icon]="'arrow-left'"></fa-icon><span> Back</span>
+            </button>
+
+            <button type="button"
+                    [routerLink]="['/group/', contact.group.id,'contact', contact.id, 'edit']"
+                    class="btn btn-primary">
+                <fa-icon [icon]="'pencil-alt'"></fa-icon><span> Edit</span>
+            </button>
+        </div>
+    </div>
+</div>

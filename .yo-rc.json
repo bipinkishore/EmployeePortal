@@ -1,0 +1,32 @@
+{
+  "generator-jhipster": {
+    "promptValues": {
+      "packageName": "com.mycompany.myapp"
+    },
+    "jhipsterVersion": "5.4.1",
+    "applicationType": "monolith",
+    "baseName": "empPortal",
+    "packageName": "com.mycompany.myapp",
+    "packageFolder": "com/mycompany/myapp",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "cacheProvider": "ehcache",
+    "enableHibernateCache": true,
+    "websocket": false,
+    "databaseType": "sql",
+    "devDatabaseType": "mysql",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSwaggerCodegen": false,
+    "jwtSecretKey": "MzAzYmFjOTNlMWZjYmQyODg5MGQzM2M5NjIyYWI4YmM1N2Y3YjMzMTM5OThlOTMyZGVlM2FlYzM1M2NjMTlmMjU4MjE2YzdlN2YzYWY3M2I0Yzc4OWVmNTQ5YzY4M2Y2ZjdhNjg1ZDQwZmEzNjU5NDVkN2ZmZmMyZTNhNjgyN2M=",
+    "clientFramework": "angularX",
+    "useSass": false,
+    "clientPackageManager": "npm",
+    "testFrameworks": [],
+    "jhiPrefix": "jhi",
+    "enableTranslation": false
+  }
+}

@@ -1,0 +1,69 @@
+<div class="row justify-content-center">
+    <div class="col-8">
+        <form name="editForm" role="form" novalidate (ngSubmit)="save()" #editForm="ngForm">
+            <h2 id="jhi-contact-heading">Create or edit a Contact</h2>
+            <div>
+                <jhi-alert-error></jhi-alert-error>
+                <div class="form-group" [hidden]="!contact.id">
+                    <label for="id">ID</label>
+                    <input type="text" class="form-control" id="id" name="id"
+                        [(ngModel)]="contact.id" readonly />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_name">Name</label>
+                    <input type="text" class="form-control" name="name" id="field_name"
+                        [(ngModel)]="contact.name" required/>
+                    <div [hidden]="!(editForm.controls.name?.dirty && editForm.controls.name?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.name?.errors?.required">
+                        This field is required.
+                        </small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_emailId">Email Id</label>
+                    <input type="text" class="form-control" name="emailId" id="field_emailId"
+                        [(ngModel)]="contact.email" />
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_status">Status</label>
+                    <select class="form-control" name="status" [(ngModel)]="contact.status" id="field_status" >
+                        <option value="ACTIVE">ACTIVE</option>
+                        <option value="INACTIVE">INACTIVE</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-control-label" for="field_mobileNumber">Mobile Number</label>
+                    <input type="number" class="form-control" name="mobileNumber" id="field_mobileNumber"
+                        [(ngModel)]="contact.mobileNumber" required/>
+                    <div [hidden]="!(editForm.controls.mobileNumber?.dirty && editForm.controls.mobileNumber?.invalid)">
+                        <small class="form-text text-danger"
+                        [hidden]="!editForm.controls.mobileNumber?.errors?.required">
+                        This field is required.
+                        </small>
+                        <small class="form-text text-danger"
+                            [hidden]="!editForm.controls.mobileNumber?.errors?.number">
+                            This field should be a number.
+                        </small>
+                    </div>
+                </div>
+
+               <!--  <div class="form-group">
+                    <label class="form-control-label" for="field_group">Group{{contact.group}}</label>
+                    <select class="form-control" id="field_group" name="group" [(ngModel)]="contact.group" >
+                        <option [ngValue]="null"></option>
+                        <option [ngValue]="groupOption.id === contact.group?.id ? contact.group : groupOption" *ngFor="let groupOption of groups; trackBy: trackGroupById">{{groupOption.id}}</option>
+                    </select>
+                </div> -->
+            </div>
+            <div>
+                <button type="button" id="cancel-save" class="btn btn-secondary"  (click)="previousState()">
+                    <fa-icon [icon]="'ban'"></fa-icon><span>Cancel</span>
+                </button>
+                <button type="submit" id="save-entity" [disabled]="editForm.form.invalid || isSaving" class="btn btn-primary">
+                    <fa-icon [icon]="'save'"></fa-icon><span>Save</span>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
