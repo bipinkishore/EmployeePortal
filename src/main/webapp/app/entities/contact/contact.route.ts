@@ -12,6 +12,9 @@ import { ContactDetailComponent } from './contact-detail.component';
 import { ContactUpdateComponent } from './contact-update.component';
 import { ContactDeletePopupComponent } from './contact-delete-dialog.component';
 import { IContact } from 'app/shared/model/contact.model';
+import { GroupService } from 'app/entities/group/group.service';
+import { Group } from 'app/shared/model/group.model';
+import { IGroup } from 'app/shared/model/group.model';
 
 @Injectable({ providedIn: 'root' })
 export class ContactResolve implements Resolve<IContact> {
@@ -27,15 +30,15 @@ export class ContactResolve implements Resolve<IContact> {
 }
 
 @Injectable({ providedIn: 'root' })
-export class GroupContactResolve implements Resolve<IContact> {
-    constructor(private service: ContactService) {}
+export class GroupResolve implements Resolve<IGroup> {
+    constructor(private service: GroupService) {}
 
     resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
-         const gid = route.params['gid'] ? route.params['gid'] : null;
-        if (gid) {
-            return gid;
+        const id = route.params['gid'] ? route.params['gid'] : null;
+        if (id) {
+            return this.service.find(id).pipe(map((group: HttpResponse<Group>) => group.body));
         }
-        return 0;
+        return of(new Group());
     }
 }
 
@@ -70,7 +73,7 @@ export const contactRoute: Routes = [
         component: ContactUpdateComponent,
         resolve: {
             contact: ContactResolve,
-            gid: GroupContactResolve
+            group: GroupResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -83,7 +86,7 @@ export const contactRoute: Routes = [
         component: ContactUpdateComponent,
         resolve: {
             contact: ContactResolve,
-            gid: GroupContactResolve
+            group: GroupResolve
         },
         data: {
             authorities: ['ROLE_USER'],
@@ -96,7 +99,7 @@ export const contactRoute: Routes = [
         component: ContactComponent,
         resolve: {
             pagingParams: JhiResolvePagingParams,
-            gid: GroupContactResolve
+            group: GroupResolve
         },
         data: {
             authorities: ['ROLE_USER'],

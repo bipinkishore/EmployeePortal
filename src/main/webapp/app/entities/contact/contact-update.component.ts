@@ -7,7 +7,7 @@ import { JhiAlertService } from 'ng-jhipster';
 import { IContact } from 'app/shared/model/contact.model';
 import { ContactService } from './contact.service';
 import { IGroup } from 'app/shared/model/group.model';
-import { GroupService } from 'app/entities/group';
+import { GroupService } from 'app/entities/group/group.service';
 import { map } from 'rxjs/operators';
 
 @Component({
@@ -17,7 +17,7 @@ import { map } from 'rxjs/operators';
 export class ContactUpdateComponent implements OnInit {
     private _contact: IContact;
     isSaving: boolean;
-    gid: any;
+    group: IGroup;
     routeData: any;
 
     groups: IGroup[];
@@ -29,7 +29,7 @@ export class ContactUpdateComponent implements OnInit {
         private activatedRoute: ActivatedRoute
     ) {
          this.routeData = this.activatedRoute.data.subscribe(data => {
-            this.gid = data.gid;
+            this.group = data.group;
          });
     }
 
@@ -38,19 +38,8 @@ export class ContactUpdateComponent implements OnInit {
         this.activatedRoute.data.subscribe(({ contact }) => {
             this.contact = contact;
         });
-       // this.groupService.find(this.gid).pipe(map((group: HttpResponse<Group>) => {this.contact.group=group.body}));
-       this.groupService.find(this.gid).subscribe(
-            (res: HttpResponse<IGroup>) => {
-                this.contact.group = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
-       this.groupService.query().subscribe(
-            (res: HttpResponse<IGroup[]>) => {
-                this.groups = res.body;
-            },
-            (res: HttpErrorResponse) => this.onError(res.message)
-        );
+
+        this.contact.group = this.group;
     }
 
     previousState() {

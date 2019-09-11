@@ -11,22 +11,23 @@
     </h2>
     <jhi-alert></jhi-alert>
     <br/>
-     <div class="row">
-                    <label class="col-sm-1">FilterBy:</label>
-                    <select class="col-sm-2" [(ngModel)]="filtercriteria" (change)="clearFilter($event.target.value)">
-                         <option value="ALL">NONE</option>
+      <td class="text-right">
+                    <div class="btn-group flex-btn-group-container">
+                        <label>Filter By:&nbsp;</label>
+                    <select [(ngModel)]="filtercriteria" (change)="clearFilter($event.target.value)">
+                         <option value="NONE">None</option>
                         <option value="NAME">Name</option>
                         <option value="STATUS">Status</option>
                     </select>
-                     <label class="col-sm-2" [hidden]="filtercriteria !=='NAME'">Enter Name:</label>
-                     <input type="text" class="col-sm-2"  [(ngModel)]="searchlistbyname" (keyup.enter)="searchByName(searchlistbyname)" [hidden]="filtercriteria !=='NAME'"/>
-                     <label class="col-sm-2" [hidden]="filtercriteria !=='STATUS'">Select Status:</label>
-                    <select class="col-sm-2" [(ngModel)]="searchlistbystatus" [hidden]="filtercriteria !=='STATUS'" (change)="searchByStatus($event.target.value)">
+                     <label [hidden]="filtercriteria !=='NAME'">&nbsp;&nbsp;Enter Name:&nbsp;</label>
+                     <input type="text" [(ngModel)]="searchlistbyname" (keyup.enter)="searchByName(searchlistbyname)" [hidden]="filtercriteria !=='NAME'"/>
+                     <label [hidden]="filtercriteria !=='STATUS'">&nbsp;&nbsp;Select Status:&nbsp;</label>
+                    <select [(ngModel)]="searchlistbystatus" [hidden]="filtercriteria !=='STATUS'" (change)="searchByStatus($event.target.value)">
                         <option value="ACTIVE">ACTIVE</option>
                         <option value="INACTIVE">INACTIVE</option>
                     </select>
-
-        </div>
+                    </div>
+                </td>
     <br/>    
     <div class="table-responsive" *ngIf="groups">
         <table class="table table-striped">
@@ -73,8 +74,10 @@
     </div>
     <div *ngIf="groups && groups.length && pagination">
         <div class="row justify-content-left">
-             <label>No of Records per Page: </label>
-                    <input type="text" length="3" size="1" [(ngModel)]="newitemsPerPage"  (keyup.enter)="loadNewPage(page)"/>
+             <label>No of Records per Page:&nbsp; </label>
+             <select name="noofpage" [(ngModel)]="itemsPerPage" (change)="loadNewPage()">
+                       <option *ngFor="let number of numbers" [ngValue]="number">{{number}}</option>
+              </select>
         </div>
         <div class="row justify-content-center">
             <jhi-item-count [page]="page" [total]="queryCount" [maxSize]="5" [itemsPerPage]="itemsPerPage"></jhi-item-count>

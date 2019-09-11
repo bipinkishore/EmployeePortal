@@ -34,6 +34,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     filtercriteria: any;
     searchlistbyname:any;
     searchlistbystatus:any;
+    numbers: number[]=[];
 
     constructor(
         private groupService: GroupService,
@@ -45,13 +46,16 @@ export class GroupComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.newitemsPerPage = this.itemsPerPage;
         this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = data.pagingParams.page;
             this.previousPage = data.pagingParams.page;
             this.reverse = data.pagingParams.ascending;
             this.predicate = data.pagingParams.predicate;
             this.pagination = true;
+            this.filtercriteria = "NONE";
+            for (let i = 1; i <= 50; i++) {
+                this.numbers.push(i);
+             }
         });
     }
 
@@ -76,13 +80,10 @@ export class GroupComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadNewPage(page: number) {
-        if (this.newitemsPerPage !== this.itemsPerPage) {
-            this.previousPage = page;
-            this.page = 1;
-            this.itemsPerPage = this.newitemsPerPage;
-            this.transition();
-        }
+    loadNewPage() {
+        this.previousPage = this.page;
+        this.page = 0;
+        this.transition();
     }
 
     transition() {
@@ -158,7 +159,7 @@ export class GroupComponent implements OnInit, OnDestroy {
     clearFilter(type: string){
         this.searchlistbyname=undefined;
         this.searchlistbystatus=undefined;
-        if(type==='ALL'){
+        if(type==='NONE'){
             this.loadAll();    
         }
     }

@@ -5,10 +5,12 @@ import { Subscription } from 'rxjs';
 import { JhiEventManager, JhiParseLinks, JhiAlertService } from 'ng-jhipster';
 
 import { IContact } from 'app/shared/model/contact.model';
+import { IGroup } from 'app/shared/model/group.model';
 import { Principal } from 'app/core';
 
 import { ITEMS_PER_PAGE } from 'app/shared';
 import { ContactService } from './contact.service';
+import { GroupService } from 'app/entities/group/group.service';
 
 @Component({
     selector: 'jhi-contact',
@@ -25,19 +27,19 @@ export class ContactComponent implements OnInit, OnDestroy {
     totalItems: any;
     queryCount: any;
     itemsPerPage: any;
-    newitemsPerPage: any;
     page: any;
     predicate: any;
     previousPage: any;
     reverse: any;
-    gid: any;
     pagination: any;
     filtercriteria: any;
     searchlistbyname:any;
     searchlistbystatus:any;
     searchlistbyemail:any;
-
+    numbers: number[]=[];
+    group: IGroup;
     constructor(
+        private groupService: GroupService,
         private contactService: ContactService,
         private parseLinks: JhiParseLinks,
         private jhiAlertService: JhiAlertService,
@@ -47,15 +49,17 @@ export class ContactComponent implements OnInit, OnDestroy {
         private eventManager: JhiEventManager
     ) {
         this.itemsPerPage = ITEMS_PER_PAGE;
-        this.newitemsPerPage = this.itemsPerPage;
         this.routeData = this.activatedRoute.data.subscribe(data => {
             this.page = data.pagingParams.page;
             this.previousPage = data.pagingParams.page;
             this.reverse = data.pagingParams.ascending;
             this.predicate = data.pagingParams.predicate;
-            this.gid = data.gid;
+            this.group = data.group;
             this.pagination = true;
-            /*this.numbers = new Array(50).fill().map((x,i)=>i);*/ // [0,1,2,3,4,...,100]
+            this.filtercriteria = "NONE";
+            for (let i = 1; i <= 50; i++) {
+                this.numbers.push(i);
+             }
         });
     }
 
@@ -66,7 +70,7 @@ export class ContactComponent implements OnInit, OnDestroy {
                 page: this.page - 1,
                 size: this.itemsPerPage,
                 sort: this.sort(),
-                gid: this.gid
+                gid: this.group.id
             })
             .subscribe(
                 (res: HttpResponse<IContact[]>) => this.paginateContacts(res.body, res.headers),
@@ -81,22 +85,19 @@ export class ContactComponent implements OnInit, OnDestroy {
         }
     }
 
-    loadNewPage(page: number) {
-        if (this.newitemsPerPage !== this.itemsPerPage) {
-            this.previousPage = page;
+    loadNewPage() {
+            this.previousPage = this.page;
             this.page = 1;
-            this.itemsPerPage = this.newitemsPerPage;
             this.transition();
-        }
     }
 
     transition() {
-        this.router.navigate(['/group/'+ this.gid+'/contact'], {
+        this.router.navigate(['/group/'+ this.group.id+'/contact'], {
             queryParams: {
                 page: this.page,
                 size: this.itemsPerPage,
                 sort: this.predicate,
-                gid: this.gid + ',' + (this.reverse ? 'asc' : 'desc')
+                gid: this.group.id + ',' + (this.reverse ? 'asc' : 'desc')
             }
         });
         this.loadAll();
@@ -143,7 +144,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     searchByName(name: string){
-         this.contactService.searchByName(this.gid, name).subscribe(
+         this.contactService.searchByName(this.group.id, name).subscribe(
             (res: HttpResponse<IContact[]>) => {
                 this.contacts = res.body;
                 this.pagination = false;
@@ -153,7 +154,7 @@ export class ContactComponent implements OnInit, OnDestroy {
     }
 
     searchByStatus(status: string){
-        this.contactService.searchByStatus(this.gid, status).subscribe(
+        this.contactService.searchByStatus(this.group.id, status).subscribe(
             (res: HttpResponse<IContact[]>) => {
                 this.contacts = res.body;
                 this.pagination = false;
@@ -162,7 +163,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         );
     }
     searchByEmail(email: string){
-        this.contactService.searchByEmail(this.gid, email).subscribe(
+        this.contactService.searchByEmail(this.group.id, email).subscribe(
             (res: HttpResponse<IContact[]>) => {
                 this.contacts = res.body;
                 this.pagination = false;
@@ -174,7 +175,7 @@ export class ContactComponent implements OnInit, OnDestroy {
         this.searchlistbyname=undefined;
         this.searchlistbystatus=undefined;
         this.searchlistbyemail=undefined;
-        if(type==='ALL'){
+        if(type==='NONE'){
             this.loadAll();    
         }
     }
